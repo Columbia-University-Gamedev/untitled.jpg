@@ -33,14 +33,17 @@ public class Player : MonoBehaviour
             canGrip = true;//using bool because using input with physics can cause issues
             grip = other.gameObject;
         }
+        
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
+        //Changes to add throwable interface
         if (other.gameObject.CompareTag("BlockGrip"))
         {
             canGrip = false;
         }
+
     }
 
     // Update is called once per frame
@@ -60,22 +63,28 @@ public class Player : MonoBehaviour
         if (canGrip) {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                heldBlock = grip.gameObject.transform.parent.gameObject;
+                if(grip.GetComponentInParent<Throwable>() != null)
+                {
+                    heldBlock = grip.gameObject.transform.parent.gameObject;
+                }
+                
             }
         }
 
         //If we are holding block 
         if (heldBlock != null) {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))    
             {
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-                Throw(mousePos2D);
+                Vector3 mousePos2D = new Vector3(mousePos.x, mousePos.y,0);
+                heldBlock.GetComponent<Throwable>().Throw(mousePos2D);
+                heldBlock= null; // Reset the heldBlock reference since it's no longer held
             }
             else {
                 Vector3 handPos = hand.transform.position;
                 heldBlock.transform.position = handPos;
             }
+            
         }
     }
     void Jump()
@@ -85,14 +94,7 @@ public class Player : MonoBehaviour
         
     }
 
-    void Throw(Vector2 mp) {
-        Debug.Log("Thrown");
-        Vector2 blockPos2d= new Vector2(heldBlock.transform.position.x, heldBlock.transform.position.y); 
-        Vector2 throwDirection = (mp-blockPos2d).normalized;
-        float blockWeight=heldBlock.GetComponent<Block>().weight;
-        float throwForce = 100.0f/blockWeight; // Adjust this value to control the throw force
-        heldBlock.GetComponent<Rigidbody2D>().AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
-        // Reset the heldBlock reference since it's no longer held
-        heldBlock = null;
-    }
+    
+    
+ 
 }
