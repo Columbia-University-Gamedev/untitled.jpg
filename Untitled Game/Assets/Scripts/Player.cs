@@ -94,6 +94,11 @@ public class Player : MonoBehaviour
         
     }
 
+    public void Die()
+    {
+        print("Dead!");
+    }
+
     
     
  
