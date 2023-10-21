@@ -39,7 +39,9 @@ public class Player : MonoBehaviour
 
     private bool IsWalled()
     {
-        return Physics2D.OverlapCircle(front.transform.position, 0.2f, 3);
+        Collider2D col = Physics2D.OverlapCircle(front.transform.position, 0.2f, LayerMask.GetMask("Grabbable"));
+        Debug.Log(col);
+        return col;
     }
 
     void OnTriggerStay2D(Collider2D other)
