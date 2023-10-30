@@ -10,6 +10,8 @@ TagManager:
   - BlockGrip
   - Time
   - Attempt
+  - Tutorial1
+  - Tutorial2
   layers:
   - Default
   - TransparentFX
@@ -18,8 +20,8 @@ TagManager:
   - Water
   - UI
   - Destroyable
-  - 
-  - 
+  - Tutorial1
+  - Tutorial2
   - 
   - 
   - 

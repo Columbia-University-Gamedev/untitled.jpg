@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 15f;
@@ -15,6 +16,8 @@ public class Player : MonoBehaviour
 
     private bool canGrip = false;
     private bool grounded = true;
+    public static bool tutorial1 = false;
+    public static bool tutorial2 = false;
     private bool isFacingRight = true;
     private GameObject grip;
     private GameObject heldBlock;
@@ -40,17 +43,29 @@ public class Player : MonoBehaviour
     private bool IsWalled()
     {
         Collider2D col = Physics2D.OverlapCircle(front.transform.position, 0.2f, LayerMask.GetMask("Grabbable"));
-        Debug.Log(col);
+        return col;
+    }
+
+    private bool IsTutorial1()
+    {
+        Collider2D col = Physics2D.OverlapCircle(front.transform.position, 0.2f, LayerMask.GetMask("Tutorial1"));
+        return col;
+    }
+
+    private bool IsTutorial2()
+    {
+        Collider2D col = Physics2D.OverlapCircle(front.transform.position, 0.2f, LayerMask.GetMask("Tutorial2"));
         return col;
     }
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("BlockGrip")) {
+        if (other.gameObject.CompareTag("BlockGrip"))
+        {
             canGrip = true;//using bool because using input with physics can cause issues
             grip = other.gameObject;
         }
-        
+
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -62,11 +77,13 @@ public class Player : MonoBehaviour
         }
 
     }
-
     // Update is called once per frame
     void Update()
     {
         grounded = feet.GetComponent<FootSensor>().sensed;
+        tutorial1 = IsTutorial1();
+        tutorial2 = IsTutorial2();
+        //Debug.Log(tutorial1+","+tutorial2);
         //Player movment
         horizontalInput = Input.GetAxis("Horizontal");
         Vector3 movement = new Vector3(horizontalInput, 0f, 0f) * moveSpeed * Time.deltaTime;

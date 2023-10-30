@@ -7,6 +7,8 @@ public class Manager : MonoBehaviour
 {
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI attemptsText;
+    public TextMeshProUGUI tutorial1Text;
+    public TextMeshProUGUI tutorial2Text;
     private float timeLeft = 20.0f;
     private int attempts = 0;
     public static Manager Instance;
@@ -28,6 +30,8 @@ public class Manager : MonoBehaviour
             attempts = PlayerPrefs.GetInt("Attempts", 0);
             countdownText = GameObject.FindWithTag("Time").GetComponent<TextMeshProUGUI>();
             attemptsText = GameObject.FindWithTag("Attempt").GetComponent<TextMeshProUGUI>();
+            tutorial1Text = GameObject.FindWithTag("Tutorial1").GetComponent<TextMeshProUGUI>();
+            tutorial2Text = GameObject.FindWithTag("Tutorial2").GetComponent<TextMeshProUGUI>();
             StartCoroutine(StartCountdown());
         }
     }
@@ -35,7 +39,20 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        attemptsText.text = "Attempt: "+attempts.ToString();
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+
+            attemptsText.text = "Attempt: " + attempts.ToString();
+            if (Player.tutorial1)
+            {
+                tutorial1Text.color = new Color(0,0,0,0);
+                tutorial2Text.color = new Color(1,1,1,1);
+            }
+            if (Player.tutorial2)
+            {
+                tutorial2Text.color = new Color(0, 0, 0, 0);
+            }
+        }
     }
 
     private IEnumerator StartCountdown()
@@ -50,7 +67,6 @@ public class Manager : MonoBehaviour
         countdownText.text = "0.0";
         Reset();
     }
-
     private void Reset()
     {
         attempts++; // Increment attempts
