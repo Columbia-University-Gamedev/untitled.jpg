@@ -9,7 +9,7 @@ public class Manager : MonoBehaviour
     public TextMeshProUGUI attemptsText;
     public TextMeshProUGUI tutorial1Text;
     public TextMeshProUGUI tutorial2Text;
-    private float timeLeft = 20.0f;
+    private float timeLeft = 100.0f;
     private int attempts = 0;
     public static Manager Instance;
 
@@ -67,7 +67,7 @@ public class Manager : MonoBehaviour
         countdownText.text = "0.0";
         Reset();
     }
-    private void Reset()
+    public void Reset()
     {
         attempts++; // Increment attempts
         PlayerPrefs.SetInt("Attempts", attempts); // Save attempts count

@@ -172,9 +172,4 @@ public class Player : MonoBehaviour
             transform.localScale = localScale;
         }
     }
-
-    public void Die()
-    {
-        print("Dead!");
-    }
 }
