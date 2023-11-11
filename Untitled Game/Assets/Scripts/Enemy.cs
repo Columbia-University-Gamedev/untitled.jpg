@@ -8,13 +8,13 @@ public class Enemy : MonoBehaviour
     GameObject patrolPoint2;
     Vector2 point1;
     Vector2 point2;
-    private float speed=2.0f;
+    private float speed=0.5f;
     private Rigidbody2D rb;
     private BoxCollider2D bc;
     private Transform tr;
     public int enemyType;//0 is boss 1 is smaller
     public GameObject manager;
-    private GameObject hat;
+    GameObject top;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
         tr = GetComponent<Transform>();
         point1 = new Vector2(patrolPoint1.transform.position.x, patrolPoint1.transform.position.y);
         point2 = new Vector2(patrolPoint2.transform.position.x, patrolPoint2.transform.position.y);
-
+        top = tr.GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -35,6 +35,9 @@ public class Enemy : MonoBehaviour
         float t = Mathf.PingPong(Time.time * speed, 1.0f); // PingPong between 0 and 1
         Vector2 newPosition = Vector2.Lerp(point1, point2, t);
         tr.position = new Vector3(newPosition.x, newPosition.y, tr.position.z);
+        if (top.GetComponent<EnemySensor>().sensed && enemyType == 1) {
+            Destroy(gameObject);
+        }
 
     }
 
