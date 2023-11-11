@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private bool isWallGrabbing;
     private float wallJumpingDirection;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+
+    private Animator anim;
     //Wall jumping & flipping found in this nifty tutorial: https://www.youtube.com/watch?v=O6VX6Ro7EtA
 
     // Start is called before the first frame update
@@ -40,6 +42,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         bc = GetComponent<BoxCollider2D>();
         tr = GetComponent<Transform>();
+        anim = GetComponent<Animator>();
         
     }
 
@@ -90,6 +93,14 @@ public class Player : MonoBehaviour
         //Player movment
         horizontalInput = Input.GetAxis("Horizontal");
         Vector3 movement = new Vector3(horizontalInput, 0f, 0f) * moveSpeed * Time.deltaTime;
+        anim.SetFloat("HSpeed", movement.magnitude);
+        anim.SetBool("IsGrabbing", heldBlock != null);
+        anim.SetBool("IsGrounded", grounded);
+        anim.SetBool("IsWallGrabbing", isWallGrabbing);
+        anim.SetFloat("VVel", rb.velocity.y);
+        
+        
+
         transform.Translate(movement);
         //regular jump
         if (Input.GetKeyDown(KeyCode.Space) && !isWallGrabbing)
@@ -143,7 +154,10 @@ public class Player : MonoBehaviour
     void Jump()
     {
         // Apply an upward force to jump if in contact with ground
-        if (grounded) {rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); }
+        if (grounded) {
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); 
+            anim.SetTrigger("Jump");
+        }
         
     }
 
