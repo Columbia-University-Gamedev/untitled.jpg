@@ -49,5 +49,11 @@ public class Enemy : MonoBehaviour
             manager.GetComponent<Manager>().Reset();
         
         }
+        if (hitobject.gameObject.tag == "Player" && enemyType == 1)
+        {
+            //slow down player
+            hitobject.GetComponent<Player>().Slow();
+
+        }
     }
 }

@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     public float moveSpeed = 15f;
     public float jumpForce = 10f;
     private float horizontalInput;
+
+    private bool slowed = false;
+    private float slowTime = 5.0f;
     
     private Rigidbody2D rb;
     private BoxCollider2D bc;
@@ -171,5 +174,23 @@ public class Player : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+    }
+
+    public void Slow() {
+        if (!slowed) {
+            StartCoroutine(ChangeVelocityCoroutine());
+        }
+    }
+
+    IEnumerator ChangeVelocityCoroutine()
+    {
+        moveSpeed = 5f;
+        slowed = true;
+        // Wait for 15 seconds
+        yield return new WaitForSeconds(5f);
+
+        // Restore the original velocity
+        moveSpeed = 15f;
+        slowed = false;
     }
 }
