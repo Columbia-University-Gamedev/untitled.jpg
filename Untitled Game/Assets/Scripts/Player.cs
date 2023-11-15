@@ -49,7 +49,12 @@ public class Player : MonoBehaviour
     private bool IsWalled()
     {
         Collider2D col = Physics2D.OverlapCircle(front.transform.position, 0.2f, LayerMask.GetMask("Grabbable"));
-        return col;
+        if (col != null && !col.CompareTag("BlockGrip"))
+        {
+            return true;
+        }
+        else return false;
+        //return col;
     }
 
     private bool IsTutorial1()
@@ -98,10 +103,8 @@ public class Player : MonoBehaviour
         anim.SetBool("IsGrounded", grounded);
         anim.SetBool("IsWallGrabbing", isWallGrabbing);
         anim.SetFloat("VVel", rb.velocity.y);
-        
-        
 
-        transform.Translate(movement);
+        tr.Translate(movement);
         //regular jump
         if (Input.GetKeyDown(KeyCode.Space) && !isWallGrabbing)
         {
@@ -167,7 +170,7 @@ public class Player : MonoBehaviour
         wallJumpingDirection = isFacingRight ? -1 : 1;
 
         // Remember to flip player
-        if (transform.localScale.x != wallJumpingDirection)
+        if (tr.localScale.x != wallJumpingDirection)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
