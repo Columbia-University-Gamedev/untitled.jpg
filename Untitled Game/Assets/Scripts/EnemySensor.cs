@@ -7,7 +7,7 @@ public class EnemySensor : MonoBehaviour
     public bool sensed = false;
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Feet"))
         {
             sensed = true;
         }

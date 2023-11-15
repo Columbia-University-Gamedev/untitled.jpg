@@ -12,6 +12,7 @@ TagManager:
   - Attempt
   - Tutorial1
   - Tutorial2
+  - Feet
   layers:
   - Default
   - TransparentFX
