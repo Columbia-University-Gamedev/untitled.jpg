@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
     private float wallJumpingDirection;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
+    private Vector3 mousePos;
+
     private Animator anim;
     //Wall jumping & flipping found in this nifty tutorial: https://www.youtube.com/watch?v=O6VX6Ro7EtA
 
@@ -54,7 +56,6 @@ public class Player : MonoBehaviour
             return true;
         }
         else return false;
-        //return col;
     }
 
     private bool IsTutorial1()
@@ -104,7 +105,9 @@ public class Player : MonoBehaviour
         anim.SetBool("IsWallGrabbing", isWallGrabbing);
         anim.SetFloat("VVel", rb.velocity.y);
 
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         tr.Translate(movement);
+
         //regular jump
         if (Input.GetKeyDown(KeyCode.Space) && !isWallGrabbing)
         {
@@ -129,8 +132,7 @@ public class Player : MonoBehaviour
         if (heldBlock != null) {
             if (Input.GetMouseButtonDown(0))    
             {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector3 mousePos2D = new Vector3(mousePos.x, mousePos.y,0);
+                Vector3 mousePos2D = new Vector3(mousePos.x, mousePos.y, 0);
                 heldBlock.GetComponent<Throwable>().Throw(mousePos2D);
                 heldBlock= null; // Reset the heldBlock reference since it's no longer held
             }
@@ -152,7 +154,11 @@ public class Player : MonoBehaviour
         {
             isWallGrabbing = false;
         }
-        Flip();
+
+        if (!IsWalled() && grounded) {
+            Flip();
+        }
+        
     }
     void Jump()
     {
@@ -184,7 +190,8 @@ public class Player : MonoBehaviour
 
     private void Flip()
     {
-        if (isFacingRight && horizontalInput < 0f || !isFacingRight && horizontalInput > 0f)
+        float directionToMouse = mousePos.x - tr.position.x;
+        if (isFacingRight && directionToMouse < 0f || !isFacingRight && directionToMouse > 0f)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
